@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Song Details</title>
+
+</head>
+<body>
+<header>
+    <h1>Song title</h1>
+</header>
+<section>
+    <h2 th:text="'Genre: ' + ${song.genre}"></h2>
+    <h2 th:text="'Year: ' + ${song.releaseYear}"></h2>
+    <h2>Performers:</h2>
+    <ul th:each="performer : ${song.getPerformers()}">
+        <li th:utext="${performer.firstName} + ' ' + ${performer.lastName} + '<br>'"></li>
+    </ul>
+</section>
+
+</body>
+</html>
