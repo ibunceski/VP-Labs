@@ -15,8 +15,8 @@ public class SongRepository {
         return DataHolder.songList;
     }
 
-    public Optional<Song> findByTrackId(String trackId) {
-        return DataHolder.songList.stream().filter(i -> i.getTrackId().equals(trackId)).findFirst();
+    public Optional<Song> findByTrackId(Long songId) {
+        return DataHolder.songList.stream().filter(i -> i.getId().equals(songId)).findFirst();
     }
 
     public Artist addArtistToSong(Artist artist, Song song) {
@@ -24,5 +24,14 @@ public class SongRepository {
         song.addArtist(artist);
         DataHolder.songList.add(song);
         return artist;
+    }
+
+    public void deleteSong(Song song) {
+        DataHolder.songList.remove(song);
+    }
+
+    public Song addSong(Song song) {
+        DataHolder.songList.add(song);
+        return song;
     }
 }

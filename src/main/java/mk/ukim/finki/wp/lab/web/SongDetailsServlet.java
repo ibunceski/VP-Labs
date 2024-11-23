@@ -33,9 +33,7 @@ public class SongDetailsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String songId = (String) req.getSession().getAttribute("songId");
-
-        Artist artist;
+        Long songId = (Long) req.getSession().getAttribute("songId");
         Song song;
 
         try {
@@ -59,7 +57,7 @@ public class SongDetailsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long artistId = Long.valueOf(req.getParameter("artistId"));
         req.getSession().setAttribute("artistId", artistId);
-        String songId = (String) req.getSession().getAttribute("songId");
+        Long songId = (Long) req.getSession().getAttribute("songId");
 
         try {
             Artist artist = artistService.findById(artistId);

@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.ukim.finki.wp.lab.model.Song;
+import mk.ukim.finki.wp.lab.model.exceptions.SongDoesNotExistException;
 import mk.ukim.finki.wp.lab.service.ArtistService;
 import mk.ukim.finki.wp.lab.service.SongService;
 import org.thymeleaf.context.WebContext;
@@ -38,5 +40,24 @@ public class SongListServlet extends HttpServlet {
         webContext.setVariable("songs", songService.listSongs());
 
         springTemplateEngine.process("listSongs.html", webContext, resp.getWriter());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long songId = Long.valueOf(req.getParameter("song"));
+        try {
+            Song song = songService.findByTrackId(songId);
+            int rating = Integer.parseInt(req.getParameter("songRating" + songId));
+            req.getSession().setAttribute("songId", songId);
+            if (rating == 0) {
+                resp.sendRedirect("artist");
+            } else {
+                song.addRating(rating);
+                resp.sendRedirect("listSongs");
+            }
+        } catch (SongDoesNotExistException e) {
+            System.out.println("Song does not exist");
+        }
+
     }
 }

@@ -25,10 +25,6 @@ public class ArtistServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String songId = req.getParameter("songId");
-
-        req.getSession().setAttribute("songId", songId);
-
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
                 .buildExchange(req, resp);
@@ -39,12 +35,5 @@ public class ArtistServlet extends HttpServlet {
 
         springTemplateEngine.process("artistsList.html", webContext, resp.getWriter());
 
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String songId = req.getParameter("song");
-
-        resp.sendRedirect("/artist?songId=" + songId);
     }
 }
