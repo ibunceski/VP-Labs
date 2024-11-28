@@ -44,20 +44,38 @@ public class SongServiceImplementation implements SongService {
     }
 
     @Override
-    public Song saveSong(Long songId, String title, String genre, Integer releaseYear, Long albumId, boolean edit) throws SongDoesNotExistException, AlbumDoesNotExistException {
-        Song newSong;
-        if (edit) {
-            Song song = findByTrackId(songId);
-            List<Artist> artists = song.getPerformers();
-            Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumDoesNotExistException(albumId));
-            songRepository.deleteSong(song);
-            newSong = new Song(title, genre, releaseYear, artists, album, songId);
-        } else {
-            Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumDoesNotExistException(albumId));
-            newSong = new Song(title, genre, releaseYear, new ArrayList<>(), album);
-        }
+    public Song saveSong(String title, String genre, Integer releaseYear, Long albumId) throws SongDoesNotExistException, AlbumDoesNotExistException {
+        Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumDoesNotExistException(albumId));
+        Song newSong = new Song(title, genre, releaseYear, new ArrayList<>(), album);
         return songRepository.addSong(newSong);
     }
+
+    @Override
+    public void editSong(Long songId, String title, String genre, Integer releaseYear, Long albumId) throws SongDoesNotExistException, AlbumDoesNotExistException {
+        Song song = findByTrackId(songId);
+        List<Artist> artists = song.getPerformers();
+        Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumDoesNotExistException(albumId));
+        song.setTitle(title);
+        song.setGenre(genre);
+        song.setReleaseYear(releaseYear);
+        song.setAlbum(album);
+    }
+
+//    @Override
+//    public Song saveSong(Long songId, String title, String genre, Integer releaseYear, Long albumId, boolean edit) throws SongDoesNotExistException, AlbumDoesNotExistException {
+//        Song newSong;
+//        if (edit) {
+//            Song song = findByTrackId(songId);
+//            List<Artist> artists = song.getPerformers();
+//            Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumDoesNotExistException(albumId));
+//            songRepository.deleteSong(song);
+//            newSong = new Song(title, genre, releaseYear, artists, album, songId);
+//        } else {
+//            Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumDoesNotExistException(albumId));
+//            newSong = new Song(title, genre, releaseYear, new ArrayList<>(), album);
+//        }
+//        return songRepository.addSong(newSong);
+//    }
 
     public void deleteById(Long id) throws SongDoesNotExistException {
         this.songRepository.deleteSong(songRepository.findByTrackId(id).orElseThrow(() -> new SongDoesNotExistException(id)));

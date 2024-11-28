@@ -15,7 +15,9 @@ public interface SongService {
 
     Song findByTrackId(Long trackId) throws SongDoesNotExistException;
 
-    Song saveSong(Long songId, String title, String genre, Integer releaseYear, Long albumId, boolean edit) throws SongDoesNotExistException, AlbumDoesNotExistException;
+    Song saveSong(String title, String genre, Integer releaseYear, Long albumId) throws SongDoesNotExistException, AlbumDoesNotExistException;
+
+    void editSong(Long songId, String title, String genre, Integer releaseYear, Long albumId) throws SongDoesNotExistException, AlbumDoesNotExistException;
 
     public void deleteById(Long id) throws SongDoesNotExistException;
 }
