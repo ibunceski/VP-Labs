@@ -63,7 +63,7 @@ public class SongDetailsServlet extends HttpServlet {
             Artist artist = artistService.findById(artistId);
             Song song = songService.findByTrackId(songId);
 
-            songService.addArtistToSong(artist, song);
+            songService.addArtistToSong(artistId, songId);
         } catch (ArtistDoesNotExistException | SongDoesNotExistException e) {
             throw new RuntimeException(e);
         }

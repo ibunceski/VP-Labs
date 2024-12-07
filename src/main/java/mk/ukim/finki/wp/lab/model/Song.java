@@ -1,22 +1,31 @@
 package mk.ukim.finki.wp.lab.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Entity
+@NoArgsConstructor
 public class Song {
+    @Id
+    @GeneratedValue
+    Long id;
     String title;
     String genre;
     Integer releaseYear;
-    List<Artist> performers;
-    List<Integer> ratings;
-    Long id;
-    private Album album;
 
-    static Long currentId = 1L;
+    @ManyToMany
+    List<Artist> performers;
+
+    @ElementCollection
+    List<Integer> ratings;
+
+    @ManyToOne
+    private Album album;
 
     public Song(String title, String genre, Integer releaseYear, List<Artist> performers, Album album) {
         this.title = title;
@@ -25,7 +34,6 @@ public class Song {
         this.performers = new ArrayList<>(performers);
         this.ratings = new ArrayList<>();
         this.album = album;
-        this.id = currentId++;
     }
 
     public Song(String title, String genre, Integer releaseYear, List<Artist> performers, Album album, Long id) {

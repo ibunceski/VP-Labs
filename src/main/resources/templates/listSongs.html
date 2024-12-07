@@ -68,6 +68,20 @@
         <div th:text="${error}" class="error"></div>
     </th:block>
 
+    <section class="albumFilter">
+        <form method="get" action="songs">
+            <select name="album">
+                <option></option>
+                <option
+                        th:each="album : ${albums}"
+                        th:value="${album.getId()}"
+                        th:text="${album.getName()}">
+                </option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
     <h2>Choose a song:</h2>
     <form class="songs" method="POST" action="songs">
         <div th:each="song : ${songs}" class="songs">

@@ -26,13 +26,20 @@ public class SongController {
     }
 
     @GetMapping
-    public String getSongsPage(@RequestParam(required = false) String error, Model model) {
+    public String getSongsPage(@RequestParam(required = false) String error, @RequestParam(defaultValue = "-1") Long album, Model model) {
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
-        model.addAttribute("songs", songService.listSongs());
+        model.addAttribute("albums", albumService.findAll());
+
+        if (album == -1) {
+            model.addAttribute("songs", songService.listSongs());
+        } else {
+            model.addAttribute("songs", songService.findByAlbumId(album));
+        }
+
 
         return "listSongs";
     }
