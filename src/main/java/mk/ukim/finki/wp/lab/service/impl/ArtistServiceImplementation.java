@@ -2,7 +2,7 @@ package mk.ukim.finki.wp.lab.service.impl;
 
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.exceptions.ArtistDoesNotExistException;
-import mk.ukim.finki.wp.lab.repository.ArtistRepository;
+import mk.ukim.finki.wp.lab.repository.jpa.ArtistRepositoryJpa;
 import mk.ukim.finki.wp.lab.service.ArtistService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class ArtistServiceImplementation implements ArtistService {
 
-    final ArtistRepository artistRepository;
+    final ArtistRepositoryJpa artistRepository;
 
-    ArtistServiceImplementation(ArtistRepository artistRepository) {
+    ArtistServiceImplementation(ArtistRepositoryJpa artistRepository) {
         this.artistRepository = artistRepository;
     }
 

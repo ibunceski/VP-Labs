@@ -1,7 +1,6 @@
 package mk.ukim.finki.wp.lab.web.controller;
 
 import jakarta.servlet.http.HttpSession;
-import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 import mk.ukim.finki.wp.lab.model.exceptions.ArtistDoesNotExistException;
 import mk.ukim.finki.wp.lab.model.exceptions.SongDoesNotExistException;
@@ -50,10 +49,7 @@ public class SongDetailsController {
         Long songId = (Long) session.getAttribute("songId");
 
         try {
-            Artist artist = artistService.findById(artistId);
-            Song song = songService.findByTrackId(songId);
-
-            songService.addArtistToSong(artist, song);
+            songService.addArtistToSong(artistId, songId);
         } catch (ArtistDoesNotExistException | SongDoesNotExistException e) {
             throw new RuntimeException(e);
         }

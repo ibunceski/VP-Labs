@@ -26,13 +26,20 @@ public class SongController {
     }
 
     @GetMapping
-    public String getSongsPage(@RequestParam(required = false) String error, Model model) {
+    public String getSongsPage(@RequestParam(required = false) String error, @RequestParam(defaultValue = "-1") Long album, Model model) {
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
-        model.addAttribute("songs", songService.listSongs());
+        model.addAttribute("albums", albumService.findAll());
+
+        if (album == -1) {
+            model.addAttribute("songs", songService.listSongs());
+        } else {
+            model.addAttribute("songs", songService.findByAlbumId(album));
+        }
+
 
         return "listSongs";
     }
@@ -51,7 +58,7 @@ public class SongController {
                 return "redirect:/artist";
             } else {
                 song.addRating(rating);
-                return "redirect:/listSongs";
+                return "redirect:/songs";
             }
         } catch (SongDoesNotExistException e) {
             return "redirect:/listSongs?error=SongDoesNotExist";
@@ -59,16 +66,14 @@ public class SongController {
     }
 
 
-
     @RequestMapping("/add")
     public String saveSong(
-//            @RequestParam Long trackId,
             @RequestParam String title,
             @RequestParam String genre,
             @RequestParam Integer releaseYear,
             @RequestParam Long albumId) {
         try {
-            this.songService.saveSong(-1L, title, genre, releaseYear, albumId, false);
+            this.songService.saveSong(title, genre, releaseYear, albumId);
         } catch (SongDoesNotExistException e) {
             return "redirect:/listSongs?error=SongDoesNotExist";
         } catch (AlbumDoesNotExistException e) {
@@ -95,7 +100,7 @@ public class SongController {
             @RequestParam Integer releaseYear,
             @RequestParam Long albumId) {
         try {
-            this.songService.saveSong(songId, title, genre, releaseYear, albumId, true);
+            this.songService.editSong(songId, title, genre, releaseYear, albumId);
         } catch (SongDoesNotExistException e) {
             return "redirect:/songs?error=SongDoesNotExistException";
         } catch (AlbumDoesNotExistException e) {
@@ -112,12 +117,12 @@ public class SongController {
     }
 
     @GetMapping("/edit-form/{id}")
-    public String editProductPage(@PathVariable Long id, Model model) {
+    public String getEditSongPage(@PathVariable Long id, Model model) {
         Song song;
         try {
             song = this.songService.findByTrackId(id);
         } catch (SongDoesNotExistException e) {
-            return "redirect:/songs ?error=SongDoesNotExist";
+            return "redirect:/songs?error=SongDoesNotExist";
         }
         List<Album> albums = this.albumService.findAll();
         model.addAttribute("albums", albums);
